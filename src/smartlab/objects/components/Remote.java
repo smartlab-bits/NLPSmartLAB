@@ -4,17 +4,24 @@
  */
 package smartlab.objects.components;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author ipc
  */
-public class Remote {
+public class Remote extends Component {
+
     private boolean state;
     private int mode, channel, volume, brightness, contrast;
-    private String remID;
-    
-    public Remote(String id, boolean s, int m, int chan, int v, int b, int con)
-    {
+    private static Map<String, Remote> mapRem = new HashMap<String, Remote>();
+
+    private Remote(String id) {
+        super(id);
+    }
+
+    public void setInitial(boolean s, int m, int chan, int v, int b, int con) {
         state = s;
         mode = m;
         channel = chan;
@@ -22,97 +29,94 @@ public class Remote {
         brightness = b;
         contrast = con;
     }
-    
-    boolean onOff(String s)
-	{
-		if(s.equalsIgnoreCase("ON"))
-			{
-				state = true;
-			}
-		else if(s.equalsIgnoreCase("OFF"))
-		{
-			state = false;
-		}
-		
-		return state;
-	}
-    
-    int changeMode(String s)
-    {
-        if(s.equalsIgnoreCase("TV"))
-                {
-                    mode = 1;
-                }
-        else if(s.equalsIgnoreCase("AV1"))
-        {
+
+    public boolean onOff(String s) {
+        if (s.equalsIgnoreCase("ON")) {
+            state = true;
+        } else if (s.equalsIgnoreCase("OFF")) {
+            state = false;
+        }
+
+        return state;
+    }
+
+    public int changeMode(String s) {
+        if (s.equalsIgnoreCase("TV")) {
+            mode = 1;
+        } else if (s.equalsIgnoreCase("AV1")) {
             mode = 2;
-                }
-        else if(s.equalsIgnoreCase("AV2"))
-        {
+        } else if (s.equalsIgnoreCase("AV2")) {
             mode = 3;
         }
         return mode;
     }
-    int changeChannel(int newChan)
-    {
+
+    public int changeChannel(int newChan) {
         channel = newChan;
         return channel;
     }
-    int increaseVolume(int amount)
-    {
+
+    public int increaseVolume(int amount) {
         volume += amount;
         return volume;
     }
-    int decreaseVoulume(int amount)
-    {
-        volume-=amount;
+
+    public int decreaseVoulume(int amount) {
+        volume -= amount;
         return volume;
     }
-    int increaseBrightness(int amount)
-    {
+
+    public int increaseBrightness(int amount) {
         brightness += amount;
         return brightness;
     }
-    int decreaseBrightness(int amount)
-    {
-        brightness-=amount;
+
+    public int decreaseBrightness(int amount) {
+        brightness -= amount;
         return brightness;
-    }int increaseContrast(int amount)
-    {
+    }
+
+    public int increaseContrast(int amount) {
         contrast += amount;
         return contrast;
     }
-    int decreaseContrast(int amount)
-    {
-        contrast-=amount;
+
+    public int decreaseContrast(int amount) {
+        contrast -= amount;
         return contrast;
     }
-    String getRemoteID()
-    {
-        return remID;
-    }
-    boolean getState()
-    {
+
+    public boolean getState() {
         return state;
     }
-    int getMode()
-    {
+
+    public int getMode() {
         return mode;
     }
-    int getChannel()
-    {
+
+    public int getChannel() {
         return channel;
     }
-    int getVolume()
-    {
+
+    public int getVolume() {
         return volume;
     }
-    int getBrightness()
-    {
+
+    public int getBrightness() {
         return brightness;
     }
-    int getContrast()
-    {
+
+    public int getContrast() {
         return contrast;
+    }
+
+    public static Remote get(String s) {
+        if (mapRem.containsKey(s)) {
+            return mapRem.get(s);
+        } else {
+            Remote rem = new Remote(s);
+            mapRem.put(s, rem);
+            return rem;
+        }
     }
 }

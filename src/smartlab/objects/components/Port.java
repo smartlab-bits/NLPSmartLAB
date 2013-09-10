@@ -4,28 +4,43 @@
  */
 package smartlab.objects.components;
 
+import java.util.HashMap;
+import java.util.Map;
+import smartlab.objects.devices.Device;
+
 /**
  *
  * @author ipc
  */
-public class Port {
-    private String portID;
+public class Port extends Component {
+
     private Switch switchObj;
-    //private Device device;
-    public Port(String id, String switchid, String deviceid)
-    {
-        portID = id;
-        switchObj = new Switch(switchid, true);
-      //  device = new Device(deviceid);
+    private Device device;
+    private static Map<String, Port> mapPort = new HashMap<String, Port>();
+
+    private Port(String id) {
+        super(id);
     }
-    
-    public void changeState()
-    {
-        
+
+    public void corSwitch(Switch sw) {
+        switchObj = sw;
     }
-    
-    public String getPortID()
-    {
-        return portID;
+
+    public void corDevice(Device d) {
+        device = d;
+    }
+
+    public void changeState(boolean state) {
+        switchObj.setState(state);        
+    }
+
+    public static Port get(String s) {
+        if (mapPort.containsKey(s)) {
+            return mapPort.get(s);
+        } else {
+            Port p = new Port(s);
+            mapPort.put(s, p);
+            return p;
+        }
     }
 }
